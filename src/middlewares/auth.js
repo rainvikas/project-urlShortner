@@ -21,17 +21,17 @@ const authentication = function (req, res, next) {
 }
 
 
-let authorization=function(req,res,next){
-    try{
-        let authorId=req.params.authorId
+let authorization = function (req, res, next) {
+    try {
+        let authorId = req.params.authorId
         let token = req.headers["x-api-key"]
-        if(!authorId) {
-            res.status(400).send({status: false, msg: " authorId is required, BAD REQUEST"})
+        if (!authorId) {
+            res.status(400).send({ status: false, msg: " authorId is required, BAD REQUEST" })
         }
 
         let decodedToken = jwt.verify(token, "Room No-38")
-        if(decodedToken.authorId != authorId){
-            return res.status(403).send({status:false,msg:"you are not authorized"})
+        if (decodedToken.authorId != authorId) {
+            return res.status(403).send({ status: false, msg: "you are not authorized" })
         }
         next()
     }
@@ -43,4 +43,4 @@ let authorization=function(req,res,next){
 
 
 module.exports.authentication = authentication
-module.exports.authorization= authorization
+module.exports.authorization = authorization

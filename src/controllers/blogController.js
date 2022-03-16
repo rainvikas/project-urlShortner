@@ -11,7 +11,7 @@ const createBlog = async function (req, res) {
             res.status(400).send({ status: false, msg: "BAD REQUEST" })
         }
         if (!authorId) {
-            res.status(400).send({ status: false, msg: "BAD REQUEST" })
+            res.status(400).send({ status: false, msg: "author id is required, BAD REQUEST" })
         }
         let authorDetails = await authorModel.findById(authorId)
         if (!authorDetails) {
@@ -60,6 +60,11 @@ const updateBlog = async function (req, res) {
     try {
 
         let blogId = req.params.blogId
+        let body = req.body
+
+        if (Object.keys(body).length == 0) {
+            res.status(400).send({ status: false, msg: "tags and subCategory are required to be updated,BAD REQUEST" })
+        }
         if (!blogId) {
             res.status(400).send({ status: false, msg: "blogId is required, BAD REQUEST" })
         }
@@ -71,7 +76,7 @@ const updateBlog = async function (req, res) {
 
             let Date = moment().format("YYYY-MM-DD[T]HH:mm:ss")
 
-            await blogModel.updateMany({ _id: blogId }, { title: "sahil", body: "wow", $push: { tags: ["Thorium"] }, $push: { subCategory: ["drama"] }, $set: { isPublished: true , publishedAt: Date } })
+            await blogModel.updateMany({ _id: blogId }, { title: "sahil", body: "wow", $push: body, $set: { isPublished: true, publishedAt: Date }, new: true })
             let updatedDetails = await blogModel.find({ _id: blogId })
             res.status(201).send({ status: true, data: updatedDetails })
         }
@@ -96,7 +101,7 @@ const deleteBlog = async function (req, res) {
         } else {
 
             let Date = moment().format("YYYY-MM-DD[T]HH:mm:ss")
-            let blogDetails = await blogModel.updateMany({ _id: blogId }, { $set: { isDeleted: true , deletedAt: Date } })
+            let blogDetails = await blogModel.updateMany({ _id: blogId }, { $set: { isDeleted: true, deletedAt: Date } })
             res.status(201).send()
             console.log(blogDetails)
         }
@@ -123,7 +128,7 @@ const deleteByQueryParam = async function (req, res) {
         } else {
 
             let Date = moment().format("YYYY-MM-DD[T]HH:mm:ss")
-            let updatedDetails = await blogModel.updateMany({ authorId: authorId,category: category}, { $set: { isDeleted: true , deletedAt: Date } })
+            let updatedDetails = await blogModel.updateMany({ authorId: authorId, category: category }, { $set: { isDeleted: true, deletedAt: Date } })
             res.status(201).send()
             console.log(updatedDetails)
         }

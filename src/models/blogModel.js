@@ -7,10 +7,12 @@ const moment= require('moment')
 const blogSchema = new mongoose.Schema({
     title: {
         type: String,
+        trim: true,
         required: true
     },
     body: {
         type: String,
+        trim: true,
         required: true
     },
     authorId: {
@@ -18,12 +20,13 @@ const blogSchema = new mongoose.Schema({
         required: true,
         ref: "author"
     },
-    tags: [String],
+    tags: [{type:String, trim: true}],
     category: {
         type: String,
+        trim: true,
         required: true
     },
-    subCategory: [String],
+    subCategory: [{type:String, trim: true}],
     isDeleted: {
         type: Boolean,
         default: false

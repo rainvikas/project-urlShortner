@@ -63,7 +63,7 @@ const redirectUrl = async function (req, res) {
         if (!urlDetails) {
             return res.status(404).send({ status: false, msg: "urlCode not exist" })
         }
-        return res.status(302).redirect(urlDetails.longUrl)
+        return res.status(200).redirect(urlDetails.longUrl)
 
     }
     catch (error) {
